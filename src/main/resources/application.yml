@@ -1,0 +1,62 @@
+api:
+  prefix: /api
+
+spring:
+  application:
+    name: orchidbe
+
+  profiles:
+    active: h2
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    operations-sorter: alpha
+    tags-sorter: alpha
+    try-it-out-enabled: true
+    filter: true
+    doc-expansion: none
+    enabled: true
+    path: /swagger-ui.html
+
+# JWT configuration
+jwt:
+  expiration: ${JWT_EXPIRATION:86400} #1 day = 1 * 24 * 60 * 60
+  expiration-refresh-token: ${JWT_REFRESH_TOKEN_EXPIRATION:5184000} #60 days = 60 * 24 * 60 * 60
+  secretKey: ${JWT_SECRET_KEY:LuuCaoHoangLuuCaoHoangLuuCaoHoangLuuCaoHoangLuuCaoHoang}
+
+# Logging configuration
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    # Your application logging level
+    com.orchid.orchidbe: ${APP_LOG_LEVEL:INFO}
+
+    # Framework logging levels (reduce noise)
+    org.springframework: ${SPRING_LOG_LEVEL:WARN}
+    org.springframework.web: ${SPRING_WEB_LOG_LEVEL:INFO}
+    org.springframework.security: ${SECURITY_LOG_LEVEL:INFO}
+    org.springframework.data.mongodb: ${MONGO_LOG_LEVEL:INFO}
+
+    # Root level
+    root: ${ROOT_LOG_LEVEL:WARN}
+
+    # Uncomment for SQL debugging
+    # org.hibernate.SQL: DEBUG
+    # org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+  # Pattern for console (only used if not overridden by logback-spring.xml)
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) %X{requestId:--} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} %X{requestId:--} - %msg%n"
+
+# Optional: Management endpoints for monitoring logs
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,loggers
+  endpoint:
+    loggers:
+      access: unrestricted

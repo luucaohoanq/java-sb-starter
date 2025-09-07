@@ -1,0 +1,20 @@
+services:
+  be:
+    container_name: orchidbe
+    build:
+      context: .
+      dockerfile: Dockerfile-prod
+    ports:
+      - "4040:8080"
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST:postgresql}
+      POSTGRES_PORT: ${POSTGRES_PORT:5432}
+      POSTGRES_DB: ${POSTGRES_DB:orchid_db}
+      POSTGRES_USER: ${POSTGRES_USER:admin}
+      POSTGRES_PASS: ${POSTGRES_PASS:admin}
+    networks:
+      - sba
+
+networks:
+  sba:
+    driver: bridge
