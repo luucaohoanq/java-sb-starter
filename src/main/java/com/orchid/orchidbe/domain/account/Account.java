@@ -1,5 +1,6 @@
 package com.orchid.orchidbe.domain.account;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.orchid.orchidbe.domain.role.Role;
@@ -12,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -47,10 +49,27 @@ public class Account implements UserDetails {
 
     private String password;
 
+    @Size(max = 20)
+    @Column(name = "activation_key")
+    @JsonIgnore
+    private String activationKey;
+
+    @Size(max = 20)
+    @Column(name = "reset_key")
+    @JsonIgnore
+    private String resetKey;
+
+    @Size(min = 2, max = 10)
+    @Column(name = "lang_key")
+    private String langKey;
+
     @Enumerated(EnumType.STRING)
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
+
+    @Enumerated(EnumType.ORDINAL)
+    private UserEnum.Status status;
 
     //Spring Security
     @Override

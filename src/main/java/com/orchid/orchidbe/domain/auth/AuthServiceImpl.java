@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
         log.info("Login body received: {}", loginReq);
         String email = loginReq.email();
         String password = loginReq.password();
-        String token = null;
+        String token;
 
         Optional<Account> optionalUser = accountRepository.findByEmail(email);
         if (optionalUser.isEmpty()) {

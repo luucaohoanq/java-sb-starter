@@ -8,6 +8,13 @@ spring:
   profiles:
     active: h2
 
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:you_username_here@example.com}
+    password: ${MAIL_PASSWORD:your_password_here}
+    base-url: http://127.0.0.1:8080
+
 springdoc:
   api-docs:
     path: /v3/api-docs
