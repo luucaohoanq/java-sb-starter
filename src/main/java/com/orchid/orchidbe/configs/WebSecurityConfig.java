@@ -74,7 +74,7 @@ public class WebSecurityConfig {
 
                     // Swagger UI and API docs
                     .requestMatchers(
-                        apiPrefix +"/performance/**",
+                        apiPrefix + "/performance/**",
                         "/graphiql",
                         "/graphql",
                         "/error",

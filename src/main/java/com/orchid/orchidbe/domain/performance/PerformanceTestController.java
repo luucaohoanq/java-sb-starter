@@ -49,7 +49,7 @@ public class PerformanceTestController {
       description = "Returns immediately - good for baseline testing")
   public ResponseEntity<Map<String, Object>> fastEndpoint() {
     long startTime = System.nanoTime();
-    
+
     Counter.builder("performance.fast.calls")
         .description("Number of calls to fast endpoint")
         .register(meterRegistry)
@@ -58,10 +58,11 @@ public class PerformanceTestController {
     Map<String, Object> response = new HashMap<>();
     response.put("message", "Fast response");
     response.put("timestamp", System.currentTimeMillis());
-    
+
     long responseTimeNs = System.nanoTime() - startTime;
     double responseTimeMs = responseTimeNs / 1_000_000.0;
-    response.put("responseTime", Math.round(responseTimeMs * 100.0) / 100.0); // Round to 2 decimal places
+    response.put(
+        "responseTime", Math.round(responseTimeMs * 100.0) / 100.0); // Round to 2 decimal places
 
     return ResponseEntity.ok(response);
   }

@@ -18,7 +18,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = "com.orchid.orchidbe.domain")
 @BrowserLauncher(
     value = "http://localhost:8080/swagger-ui.html",
-    healthCheckEndpoint = "http://localhost:8080/actuator/health")
+    healthCheckEndpoint = "http://localhost:8080/actuator/health",
+    excludeProfiles = {"h2", "test"})
 public class App {
 
   public static void main(String[] args) {
