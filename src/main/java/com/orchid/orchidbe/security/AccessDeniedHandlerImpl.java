@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 lcaohoanq. All rights reserved.
+ *
+ * This software is the confidential and proprietary information of lcaohoanq.
+ * You shall not disclose such confidential information and shall use it only in
+ * accordance with the terms of the license agreement you entered into with lcaohoanq.
+ */
 package com.orchid.orchidbe.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,22 +22,23 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
-    private final ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper;
 
-    @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException ex)
-        throws IOException {
-        response.setContentType("application/json");
-        response.setStatus(HttpStatus.FORBIDDEN.value());
+  @Override
+  public void handle(
+      HttpServletRequest request, HttpServletResponse response, AccessDeniedException ex)
+      throws IOException {
+    response.setContentType("application/json");
+    response.setStatus(HttpStatus.FORBIDDEN.value());
 
-        MyApiResponse<Object> errorResponse = new MyApiResponse.Error<>(
+    MyApiResponse<Object> errorResponse =
+        new MyApiResponse.Error<>(
             HttpStatus.FORBIDDEN.value(),
             "Access Denied",
             "You don't have permission to access this resource",
             request.getRequestURI(),
-            Instant.now()
-        );
+            Instant.now());
 
-        objectMapper.writeValue(response.getOutputStream(), errorResponse);
-    }
+    objectMapper.writeValue(response.getOutputStream(), errorResponse);
+  }
 }

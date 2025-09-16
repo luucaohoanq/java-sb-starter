@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 lcaohoanq. All rights reserved.
+ *
+ * This software is the confidential and proprietary information of lcaohoanq.
+ * You shall not disclose such confidential information and shall use it only in
+ * accordance with the terms of the license agreement you entered into with lcaohoanq.
+ */
 package com.orchid.orchidbe.filters;
 
 import com.orchid.orchidbe.components.JwtTokenUtils;
@@ -19,54 +26,52 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
-    private final UserDetailsService userDetailsService;
-    private final JwtTokenUtils jwtTokenUtil;
+  private final UserDetailsService userDetailsService;
+  private final JwtTokenUtils jwtTokenUtil;
 
-    @Override
-    protected void doFilterInternal(
-        @NonNull HttpServletRequest request,
-        @NonNull HttpServletResponse response,
-        @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
-        try {
-            // Get authorization header
-            final String authHeader = request.getHeader("Authorization");
+  @Override
+  protected void doFilterInternal(
+      @NonNull HttpServletRequest request,
+      @NonNull HttpServletResponse response,
+      @NonNull FilterChain filterChain)
+      throws ServletException, IOException {
+    try {
+      // Get authorization header
+      final String authHeader = request.getHeader("Authorization");
 
-            // If no auth header or not a Bearer token, let Spring Security handle it
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                filterChain.doFilter(request, response);
-                return;
-            }
+      // If no auth header or not a Bearer token, let Spring Security handle it
+      if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        filterChain.doFilter(request, response);
+        return;
+      }
 
-            // Extract and validate token
-            final String token = authHeader.substring(7);
-            final String email = jwtTokenUtil.extractEmail(token);
+      // Extract and validate token
+      final String token = authHeader.substring(7);
+      final String email = jwtTokenUtil.extractEmail(token);
 
-            // If we have an email and no authentication exists yet, validate the token
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                Account userDetails = (Account) userDetailsService.loadUserByUsername(email);
+      // If we have an email and no authentication exists yet, validate the token
+      if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        Account userDetails = (Account) userDetailsService.loadUserByUsername(email);
 
-                if (jwtTokenUtil.validateToken(token, userDetails)) {
-                    // Create authentication token
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                    );
+        if (jwtTokenUtil.validateToken(token, userDetails)) {
+          // Create authentication token
+          UsernamePasswordAuthenticationToken authToken =
+              new UsernamePasswordAuthenticationToken(
+                  userDetails, null, userDetails.getAuthorities());
 
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+          authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                    // Set authentication in context
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }
-            }
-
-            // Continue filter chain
-            filterChain.doFilter(request, response);
-
-        } catch (Exception e) {
-            // Let the exception propagate to the authentication entry point
-            filterChain.doFilter(request, response);
+          // Set authentication in context
+          SecurityContextHolder.getContext().setAuthentication(authToken);
         }
+      }
+
+      // Continue filter chain
+      filterChain.doFilter(request, response);
+
+    } catch (Exception e) {
+      // Let the exception propagate to the authentication entry point
+      filterChain.doFilter(request, response);
     }
+  }
 }

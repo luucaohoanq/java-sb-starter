@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 lcaohoanq. All rights reserved.
+ *
+ * This software is the confidential and proprietary information of lcaohoanq.
+ * You shall not disclose such confidential information and shall use it only in
+ * accordance with the terms of the license agreement you entered into with lcaohoanq.
+ */
 package com.orchid.orchidbe.configs;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -15,9 +22,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-    info = @Info(
-        title = "Orchid Service API",
-        description = """
+    info =
+        @Info(
+            title = "Orchid Service API",
+            description =
+                """
             ## Authentication Guide
 
             ### Quick Login Process:
@@ -43,25 +52,21 @@ import org.springframework.context.annotation.Configuration;
 
             **Note**: Tokens expire based on the `expirationDate` in the login response.
             """,
-        version = "1.0",
-        contact = @Contact(
-            name = "API Support",
-            email = "support@orchid.com"
-        )
-    ),
+            version = "1.0",
+            contact = @Contact(name = "API Support", email = "support@orchid.com")),
     security = @SecurityRequirement(name = "bearer-jwt"),
     servers = {
-        @Server(url = "http://localhost:8080", description = "Local Dev (HTTP)"),
-        @Server(url = "https://api.example.com", description = "Production (HTTPS)")
-    }
-)
+      @Server(url = "http://localhost:8080", description = "Local Dev (HTTP)"),
+      @Server(url = "https://api.example.com", description = "Production (HTTPS)")
+    })
 @SecurityScheme(
     name = "bearer-jwt",
     scheme = "bearer",
     type = SecuritySchemeType.HTTP,
     in = SecuritySchemeIn.HEADER,
     bearerFormat = "JWT",
-    description = """
+    description =
+        """
         **JWT Authentication**
 
         To authenticate:
@@ -70,18 +75,18 @@ import org.springframework.context.annotation.Configuration;
         3. Click 'Authorize' and enter: Bearer YOUR_TOKEN
 
         Token format: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
-        """
-)
+        """)
 public class OpenAPIConfig {
 
-
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-            .info(new io.swagger.v3.oas.models.info.Info()
-                      .title("Orchid Service API")
-                      .version("1.0")
-                      .description("""
+  @Bean
+  public OpenAPI customOpenAPI() {
+    return new OpenAPI()
+        .info(
+            new io.swagger.v3.oas.models.info.Info()
+                .title("Orchid Service API")
+                .version("1.0")
+                .description(
+                    """
                     # Authentication Instructions
 
                     ## Step-by-Step Authentication:
@@ -109,7 +114,6 @@ public class OpenAPIConfig {
 
                     **Tip**: Keep the login tab open to easily copy the token when it expires!
                     """)
-                      .license(new License().name("MIT").url("https://opensource.org/licenses/MIT"))
-            );
-    }
+                .license(new License().name("MIT").url("https://opensource.org/licenses/MIT")));
+  }
 }

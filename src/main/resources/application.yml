@@ -6,7 +6,7 @@ spring:
     name: orchidbe
 
   profiles:
-    active: h2
+    active: test
 
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}

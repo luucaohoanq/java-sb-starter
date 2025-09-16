@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 lcaohoanq. All rights reserved.
+ *
+ * This software is the confidential and proprietary information of lcaohoanq.
+ * You shall not disclose such confidential information and shall use it only in
+ * accordance with the terms of the license agreement you entered into with lcaohoanq.
+ */
 package com.orchid.orchidbe.configs;
 
 import com.orchid.orchidbe.repositories.AccountRepository;
@@ -15,25 +22,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final AccountRepository accountRepository;
+  private final AccountRepository accountRepository;
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return email -> accountRepository
+  @Bean
+  public UserDetailsService userDetailsService() {
+    return email ->
+        accountRepository
             .findByEmail(email)
-            .orElseThrow(() -> new UsernameNotFoundException(
-                "Cannot find user with email = " + email));
-    }
+            .orElseThrow(
+                () -> new UsernameNotFoundException("Cannot find user with email = " + email));
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-        AuthenticationConfiguration config
-    ) throws Exception {
-        return config.getAuthenticationManager();
-    }
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
+      throws Exception {
+    return config.getAuthenticationManager();
+  }
 }
