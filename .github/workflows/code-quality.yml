@@ -2,8 +2,6 @@ name: Code Quality Check
 
 on:
   workflow_dispatch:
-  push:
-    branches: [develop]
   pull_request:
     branches: [main, develop]
 
@@ -51,6 +49,9 @@ jobs:
     name: Build and Test
     runs-on: ubuntu-latest
     needs: spotless-check
+    permissions:
+      checks: write
+      contents: read
 
     steps:
       - name: Checkout code
