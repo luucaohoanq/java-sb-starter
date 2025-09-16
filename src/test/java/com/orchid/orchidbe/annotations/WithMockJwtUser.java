@@ -17,14 +17,13 @@ import java.lang.annotation.Target;
 import org.springframework.security.test.context.support.WithSecurityContext;
 
 /**
- * Custom annotation for creating a mock JWT authenticated user in tests.
- * This annotation simplifies testing of secured endpoints by automatically
- * creating a mock authenticated user with specified roles.
- * 
- * Usage:
- * - @WithMockJwtUser - Creates a user with USER role and default email
- * - @WithMockJwtUser(roles = {RoleName.ADMIN}) - Creates an admin user
- * - @WithMockJwtUser(email = "custom@test.com", roles = {RoleName.MANAGER}) - Creates a custom user
+ * Custom annotation for creating a mock JWT authenticated user in tests. This annotation simplifies
+ * testing of secured endpoints by automatically creating a mock authenticated user with specified
+ * roles.
+ *
+ * <p>Usage: - @WithMockJwtUser - Creates a user with USER role and default email
+ * - @WithMockJwtUser(roles = {RoleName.ADMIN}) - Creates an admin user - @WithMockJwtUser(email =
+ * "custom@test.com", roles = {RoleName.MANAGER}) - Creates a custom user
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
@@ -32,24 +31,16 @@ import org.springframework.security.test.context.support.WithSecurityContext;
 @Documented
 @WithSecurityContext(factory = WithMockJwtUserSecurityContextFactory.class)
 public @interface WithMockJwtUser {
-    
-    /**
-     * The email/username of the mock user
-     */
-    String email() default "test@example.com";
-    
-    /**
-     * The name of the mock user
-     */
-    String name() default "Test User";
-    
-    /**
-     * The roles to assign to the mock user
-     */
-    RoleName[] roles() default {RoleName.USER};
-    
-    /**
-     * The user ID
-     */
-    long userId() default 1L;
+
+  /** The email/username of the mock user */
+  String email() default "test@example.com";
+
+  /** The name of the mock user */
+  String name() default "Test User";
+
+  /** The roles to assign to the mock user */
+  RoleName[] roles() default {RoleName.USER};
+
+  /** The user ID */
+  long userId() default 1L;
 }

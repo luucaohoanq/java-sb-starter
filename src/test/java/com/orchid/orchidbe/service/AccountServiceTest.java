@@ -18,10 +18,8 @@ import com.orchid.orchidbe.domain.role.Role;
 import com.orchid.orchidbe.domain.role.Role.RoleName;
 import com.orchid.orchidbe.domain.role.RoleService;
 import com.orchid.orchidbe.repositories.AccountRepository;
-import com.orchid.orchidbe.repositories.RoleRepository;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,11 +42,11 @@ class AccountServiceTest {
 
   @BeforeEach
   void init() {
-    roles = List.of(
-        new Role(1L, RoleName.USER),
-        new Role(2L, RoleName.STAFF),
-        new Role(3L, RoleName.ADMIN)
-    );
+    roles =
+        List.of(
+            new Role(1L, RoleName.USER),
+            new Role(2L, RoleName.STAFF),
+            new Role(3L, RoleName.ADMIN));
   }
 
   @Test
@@ -64,7 +62,7 @@ class AccountServiceTest {
 
     var result = accountService.getAll();
 
-    assert(result.size() == 3);
+    assert (result.size() == 3);
   }
 
   @Test
@@ -79,4 +77,3 @@ class AccountServiceTest {
     verify(accountRepository).save(any(Account.class));
   }
 }
-

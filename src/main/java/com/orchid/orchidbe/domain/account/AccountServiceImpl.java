@@ -127,5 +127,4 @@ public class AccountServiceImpl implements AccountService {
     var existingAccount = getById(id);
     accountRepository.delete(existingAccount);
   }
-
 }

@@ -24,5 +24,4 @@ public interface AccountService {
   void update(Long id, AccountDTO.UpdateAccountReq account);
 
   void delete(Long id);
-
 }
