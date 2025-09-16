@@ -70,7 +70,7 @@ class AccountServiceTest {
     var req = new AccountDTO.CreateAccountReq("hoang", "hoang@gmail.com", "123456");
     when(accountRepository.existsByEmail(req.email())).thenReturn(false);
     when(passwordEncoder.encode("123456")).thenReturn("encoded_pw");
-    when(roleService.getByName(RoleName.USER)).thenReturn(roles.getFirst());
+    when(roleService.getByName(RoleName.USER)).thenReturn(roles.get(0));
 
     accountService.add(req);
 
