@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orchid.orchidbe.IntegrationTest;
 import com.orchid.orchidbe.annotations.WithMockJwtUser;
@@ -12,8 +13,12 @@ import com.orchid.orchidbe.domain.account.AccountDTO;
 import com.orchid.orchidbe.domain.role.Role;
 import com.orchid.orchidbe.domain.role.Role.RoleName;
 import com.orchid.orchidbe.repositories.AccountRepository;
+import com.orchid.orchidbe.repositories.OrderRepository;
 import com.orchid.orchidbe.repositories.RoleRepository;
+import com.orchid.orchidbe.repositories.TokenRepository;
+import com.orchid.orchidbe.util.TestDatabaseUtils;
 import java.util.List;
+import org.springframework.test.annotation.DirtiesContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @AutoConfigureMockMvc
 @Transactional //rollback after each test
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AccountControllerIT {
 
     @Autowired
@@ -37,6 +43,15 @@ public class AccountControllerIT {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
+    @Autowired
+    private TestDatabaseUtils testDatabaseUtils;
+
     private List<Role> roles;
 
     @Autowired
@@ -44,9 +59,8 @@ public class AccountControllerIT {
 
     @BeforeEach
     public void setup() {
-        //clean up db before each test
-        accountRepository.deleteAll();
-        roleRepository.deleteAll();
+        // Clean up database using utility that handles foreign key constraints
+        testDatabaseUtils.cleanDatabase();
     }
 
     @Test
@@ -60,7 +74,8 @@ public class AccountControllerIT {
             .andReturn().getResponse().getContentAsString();
 
         //assert
-        var outputAccounts = objectMapper.readValue(result, new TypeReference<List<AccountDTO.AccountResp>>() {});
+        // Parse the wrapped MyApiResponse to extract the data field
+        var outputAccounts = extractDataFromResponse(result, new TypeReference<List<AccountDTO.AccountResp>>() {});
         assert(outputAccounts.isEmpty());
     }
 
@@ -95,7 +110,8 @@ public class AccountControllerIT {
 
         //assert
 //        var outputAccounts = objectMapper.readValue(result, AccountDTO.AccountResp[].class);
-        var outputAccounts = objectMapper.readValue(result, new TypeReference<List<AccountDTO.AccountResp>>() {});
+        // Parse the wrapped MyApiResponse to extract the data field
+        var outputAccounts = extractDataFromResponse(result, new TypeReference<List<AccountDTO.AccountResp>>() {});
         assert(outputAccounts.size() == 2);
     }
 
@@ -111,9 +127,16 @@ public class AccountControllerIT {
             status().isCreated()).andReturn().getResponse().getContentAsString();
 
         //assert
-        var outputAccount = objectMapper.readValue(result, AccountDTO.AccountResp.class);
-        assert(outputAccount.id() != null);
-        assert(outputAccount.email().equals("hoang@gmail.com"));
+        // The createNewEmployee endpoint returns MyApiResponse.created() which has no data
+        // So we just verify the status and check the database
+        var responseWrapper = objectMapper.readTree(result);
+        assert(responseWrapper.get("message").asText().equals("Created successfully"));
+        
+        // Verify the account was actually created in the database
+        var savedAccounts = accountRepository.findAll();
+        assert(savedAccounts.size() == 1);
+        assert(savedAccounts.get(0).getEmail().equals("hoang@gmail.com"));
+        assert(savedAccounts.get(0).getName().equals("hoang"));
 
         // Note: This verify won't work in integration tests since we're using real repositories
         // verify(accountRepository, times(1)).save(any(Account.class));
@@ -159,6 +182,15 @@ public class AccountControllerIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(inputAccount)))
             .andExpect(status().isForbidden());
+    }
+
+    /**
+     * Helper method to extract data from MyApiResponse wrapper
+     */
+    private <T> T extractDataFromResponse(String jsonResponse, TypeReference<T> typeRef) throws Exception {
+        JsonNode responseWrapper = objectMapper.readTree(jsonResponse);
+        JsonNode dataNode = responseWrapper.get("data");
+        return objectMapper.convertValue(dataNode, typeRef);
     }
 
 }

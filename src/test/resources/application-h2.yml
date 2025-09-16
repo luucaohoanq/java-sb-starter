@@ -35,7 +35,7 @@ spring:
 # JWT configuration for tests
 jwt:
   expiration: 86400 # 1 day
-  expiration-refresh-token: 5184000 # 60 days  
+  expiration-refresh-token: 5184000 # 60 days
   secretKey: LuuCaoHoangLuuCaoHoangLuuCaoHoangLuuCaoHoangLuuCaoHoang
 
 # Logging configuration for tests
