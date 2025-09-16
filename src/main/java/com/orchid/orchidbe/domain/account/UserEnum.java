@@ -9,7 +9,7 @@ package com.orchid.orchidbe.domain.account;
 
 public class UserEnum {
 
-  enum Status {
+  public enum Status {
     UNVERIFIED,
     VERIFIED,
     BLOCKED,
