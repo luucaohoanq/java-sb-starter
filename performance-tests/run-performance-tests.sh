@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 API_URL="http://localhost:8080"
-RESULTS_DIR="./performance-results"
+RESULTS_DIR="../performance-results"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
 echo -e "${BLUE}🚀 Orchid API Performance Testing Suite${NC}"
@@ -79,7 +79,7 @@ run_k6_tests() {
         echo -e "${GREEN}✅ K6 tests completed${NC}"
     else
         echo -e "${YELLOW}⚠️ K6 not installed. Skipping K6 tests.${NC}"
-        echo "Install K6: https://k6.io/docs/getting-started/installation/"
+        echo "Install K6: https://grafana.com/docs/k6/latest/set-up/install-k6/"
     fi
 }
 
