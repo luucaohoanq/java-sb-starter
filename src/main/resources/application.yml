@@ -33,6 +33,39 @@ jwt:
   expiration-refresh-token: ${JWT_REFRESH_TOKEN_EXPIRATION:5184000} #60 days = 60 * 24 * 60 * 60
   secretKey: ${JWT_SECRET_KEY:LuuCaoHoangLuuCaoHoangLuuCaoHoangLuuCaoHoangLuuCaoHoang}
 
+# Performance monitoring with Actuator + Micrometer
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,httptrace,beans,env,loggers
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      access: unrestricted
+    prometheus:
+      access: unrestricted
+  metrics:
+    web:
+      server:
+        max-uri-tags: 100
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+      percentiles:
+        http:
+          server:
+            requests: 0.5,0.95,0.99
+
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
 # Logging configuration
 logging:
   config: classpath:logback-spring.xml
@@ -57,13 +90,3 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) %X{requestId:--} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} %X{requestId:--} - %msg%n"
-
-# Optional: Management endpoints for monitoring logs
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,loggers
-  endpoint:
-    loggers:
-      access: unrestricted
