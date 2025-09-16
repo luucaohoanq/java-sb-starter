@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 lcaohoanq. All rights reserved.
+ *
+ * This software is the confidential and proprietary information of lcaohoanq.
+ * You shall not disclose such confidential information and shall use it only in
+ * accordance with the terms of the license agreement you entered into with lcaohoanq.
+ */
 package com.orchid.orchidbe.domain.order;
 
 import com.orchid.orchidbe.domain.account.AccountService;
@@ -11,50 +18,43 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
-    private final OrderRepository orderRepository;
-    private final AccountService accountService;
+  private final OrderRepository orderRepository;
+  private final AccountService accountService;
 
-    @Override
-    public List<OrderDTO.OrderRes> getAll() {
-        return orderRepository.findAll()
-            .stream()
-            .map(Order::fromEntity)
-            .toList();
+  @Override
+  public List<OrderDTO.OrderRes> getAll() {
+    return orderRepository.findAll().stream().map(Order::fromEntity).toList();
+  }
+
+  @Override
+  public OrderDTO.OrderRes getById(Long id) {
+    return orderRepository
+        .findById(id)
+        .map(Order::fromEntity)
+        .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + id));
+  }
+
+  @Override
+  public void add(OrderDTO.OrderReq order) {
+    var account = accountService.getById(order.accountId());
+    orderRepository.save(Order.toEntity(order, account));
+  }
+
+  @Override
+  public void update(Long id, OrderDTO.OrderReq order) {
+    var existingOrder = getById(id);
+    if (!existingOrder.id().equals(order.id())) {
+      throw new IllegalArgumentException("Cannot update order with different id");
     }
+    var account = accountService.getById(order.accountId());
+    orderRepository.save(Order.toEntity(order, account));
+  }
 
-    @Override
-    public OrderDTO.OrderRes getById(Long id) {
-        return orderRepository.findById(id)
-            .map(Order::fromEntity)
-            .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + id));
-    }
+  @Override
+  public void delete(Long id) {}
 
-    @Override
-    public void add(OrderDTO.OrderReq order) {
-        var account = accountService.getById(order.accountId());
-        orderRepository.save(Order.toEntity(order, account));
-    }
-
-    @Override
-    public void update(Long id, OrderDTO.OrderReq order) {
-        var existingOrder = getById(id);
-        if (!existingOrder.id().equals(order.id())) {
-            throw new IllegalArgumentException("Cannot update order with different id");
-        }
-        var account = accountService.getById(order.accountId());
-        orderRepository.save(Order.toEntity(order, account));
-    }
-
-    @Override
-    public void delete(Long id) {
-
-    }
-
-    @Override
-    public List<OrderRes> getByUserId(Long userId) {
-        return orderRepository.findByAccountId(userId)
-            .stream()
-            .map(Order::fromEntity)
-            .toList();
-    }
+  @Override
+  public List<OrderRes> getByUserId(Long userId) {
+    return orderRepository.findByAccountId(userId).stream().map(Order::fromEntity).toList();
+  }
 }

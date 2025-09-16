@@ -1,0 +1,50 @@
+api:
+  prefix: /api
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+
+  flyway:
+    enabled: false
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:you_username_here@example.com}
+    password: ${MAIL_PASSWORD:your_password_here}
+    base-url: http://127.0.0.1:8080
+
+# JWT configuration for tests
+jwt:
+  expiration: 86400 # 1 day
+  expiration-refresh-token: 5184000 # 60 days
+  secretKey: LuuCaoHoangLuuCaoHoangLuuCaoHoangLuuCaoHoangLuuCaoHoang
+
+# Logging configuration for tests
+logging:
+  level:
+    com.orchid.orchidbe: INFO
+    org.springframework: WARN
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    root: WARN

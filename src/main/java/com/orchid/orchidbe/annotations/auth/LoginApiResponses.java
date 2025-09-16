@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 lcaohoanq. All rights reserved.
+ *
+ * This software is the confidential and proprietary information of lcaohoanq.
+ * You shall not disclose such confidential information and shall use it only in
+ * accordance with the terms of the license agreement you entered into with lcaohoanq.
+ */
 package com.orchid.orchidbe.annotations.auth;
 
 import com.orchid.orchidbe.apis.MyApiResponse;
@@ -13,17 +20,22 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@ApiResponses(value = {
-    @ApiResponse(
-        responseCode = "200",
-        description = "✅ Login successful - Copy the token value for authorization!",
-        content = @Content(
-            mediaType = "application/json",
-            schema = @Schema(implementation = MyApiResponse.class),
-            examples = @ExampleObject(
-                name = "Success Response",
-                description = "Copy the 'token' value and use it with 'Bearer ' prefix in the Authorize button",
-                value = """
+@ApiResponses(
+    value = {
+      @ApiResponse(
+          responseCode = "200",
+          description = "✅ Login successful - Copy the token value for authorization!",
+          content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = MyApiResponse.class),
+                  examples =
+                      @ExampleObject(
+                          name = "Success Response",
+                          description =
+                              "Copy the 'token' value and use it with 'Bearer ' prefix in the Authorize button",
+                          value =
+                              """
                         {
                           "code": 200,
                           "message": "Success",
@@ -41,19 +53,8 @@ import java.lang.annotation.Target;
                             }
                           }
                         }
-                        """
-            )
-        )
-    ),
-    @ApiResponse(
-        responseCode = "400",
-        description = "❌ Invalid credentials"
-    ),
-    @ApiResponse(
-        responseCode = "500",
-        description = "❌ Server error"
-    )
-})
-public @interface LoginApiResponses {
-
-}
+                        """))),
+      @ApiResponse(responseCode = "400", description = "❌ Invalid credentials"),
+      @ApiResponse(responseCode = "500", description = "❌ Server error")
+    })
+public @interface LoginApiResponses {}

@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 lcaohoanq. All rights reserved.
+ *
+ * This software is the confidential and proprietary information of lcaohoanq.
+ * You shall not disclose such confidential information and shall use it only in
+ * accordance with the terms of the license agreement you entered into with lcaohoanq.
+ */
 package com.orchid.orchidbe.annotations.auth;
 
 import com.orchid.orchidbe.domain.account.LoginReq;
@@ -14,9 +21,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(
     summary = "🚀 Login to get JWT token",
-    description = """
+    description =
+        """
             **Login and get your authentication token**
-            
+
             ### How to use this token in Swagger:
             1. **Execute this login request** with your credentials
             2. **Copy the `token` value** from the response (the long string starting with 'eyJ...')
@@ -24,29 +32,25 @@ import java.lang.annotation.Target;
             4. **Enter:** `Bearer YOUR_COPIED_TOKEN` (include the word "Bearer" and a space)
             5. **Click Authorize** and then Close
             6. **You're now authenticated!** Try any protected endpoint.
-            
+
             ### Example Response:
             The response will contain a `token` field - this is what you need to copy for authorization.
-            
+
             ### Token expires based on the `expirationDate` in the response.
             """,
-    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-        description = "Login credentials",
-        required = true,
-        content = @Content(
-            mediaType = "application/json",
-            schema = @Schema(implementation = LoginReq.class),
-            examples = {
-                @ExampleObject(
-                    name = "Demo User",
-                    summary = "Example login",
-                    description = "Sample credentials for testing",
-                    externalValue = "classpath:/swagger/examples/login.json"
-                )
-            }
-        )
-    )
-)
-public @interface LoginOperation {
-
-}
+    requestBody =
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Login credentials",
+            required = true,
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = LoginReq.class),
+                    examples = {
+                      @ExampleObject(
+                          name = "Demo User",
+                          summary = "Example login",
+                          description = "Sample credentials for testing",
+                          externalValue = "classpath:/swagger/examples/login.json")
+                    })))
+public @interface LoginOperation {}

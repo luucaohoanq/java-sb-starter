@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 lcaohoanq. All rights reserved.
+ *
+ * This software is the confidential and proprietary information of lcaohoanq.
+ * You shall not disclose such confidential information and shall use it only in
+ * accordance with the terms of the license agreement you entered into with lcaohoanq.
+ */
 package com.orchid.orchidbe.annotations.auth;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,14 +18,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(
     summary = "🚪 Logout and invalidate token",
-    description = """
+    description =
+        """
             **Logout and invalidate your current JWT token**
-            
+
             This endpoint requires authentication. Make sure you're logged in first.
             After logout, you'll need to login again to access protected endpoints.
             """,
-    security = @SecurityRequirement(name = "bearer-jwt")
-)
-public @interface LogoutOperation {
-
-}
+    security = @SecurityRequirement(name = "bearer-jwt"))
+public @interface LogoutOperation {}

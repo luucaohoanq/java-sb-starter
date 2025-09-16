@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 lcaohoanq. All rights reserved.
+ *
+ * This software is the confidential and proprietary information of lcaohoanq.
+ * You shall not disclose such confidential information and shall use it only in
+ * accordance with the terms of the license agreement you entered into with lcaohoanq.
+ */
 package com.orchid.orchidbe.domain.order;
 
 import com.orchid.orchidbe.apis.MyApiResponse;
@@ -24,47 +31,43 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "orders", description = "Operation related to Order")
 public class OrderController {
 
-    private final OrderService orderService;
+  private final OrderService orderService;
 
-    @GetMapping("")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
-    public ResponseEntity<MyApiResponse<List<OrderDTO.OrderRes>>> getOrders() {
-        return MyApiResponse.success(orderService.getAll());
-    }
+  @GetMapping("")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
+  public ResponseEntity<MyApiResponse<List<OrderDTO.OrderRes>>> getOrders() {
+    return MyApiResponse.success(orderService.getAll());
+  }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
-    public ResponseEntity<MyApiResponse<OrderRes>> getOrderById(@PathVariable Long id) {
-        return MyApiResponse.success(orderService.getById(id));
-    }
+  @GetMapping("/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
+  public ResponseEntity<MyApiResponse<OrderRes>> getOrderById(@PathVariable Long id) {
+    return MyApiResponse.success(orderService.getById(id));
+  }
 
-    @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
-    public ResponseEntity<MyApiResponse<Void>> createOrder(
-        @RequestBody @Valid OrderDTO.OrderReq orderReq
-    ) {
-        orderService.add(orderReq);
-        return MyApiResponse.created();
-    }
+  @PostMapping
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
+  public ResponseEntity<MyApiResponse<Void>> createOrder(
+      @RequestBody @Valid OrderDTO.OrderReq orderReq) {
+    orderService.add(orderReq);
+    return MyApiResponse.created();
+  }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
-    public ResponseEntity<MyApiResponse<Void>> updateOrder(
-        @PathVariable Long id, @RequestBody OrderDTO.OrderReq orderReq
-    ) {
-        orderService.update(id, orderReq);
-        return MyApiResponse.updated();
-    }
+  @PutMapping("/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
+  public ResponseEntity<MyApiResponse<Void>> updateOrder(
+      @PathVariable Long id, @RequestBody OrderDTO.OrderReq orderReq) {
+    orderService.update(id, orderReq);
+    return MyApiResponse.updated();
+  }
 
-    @GetMapping("/me/orders")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
-    public ResponseEntity<MyApiResponse<List<OrderDTO.OrderRes>>> getMyOrders(
-        Authentication authentication) {
-        Account account = (Account) authentication.getPrincipal(); // principal là chính user từ token
-        Long userId = account.getId();
+  @GetMapping("/me/orders")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
+  public ResponseEntity<MyApiResponse<List<OrderDTO.OrderRes>>> getMyOrders(
+      Authentication authentication) {
+    Account account = (Account) authentication.getPrincipal(); // principal là chính user từ token
+    Long userId = account.getId();
 
-        return MyApiResponse.success(orderService.getByUserId(userId));
-    }
-
-
+    return MyApiResponse.success(orderService.getByUserId(userId));
+  }
 }
