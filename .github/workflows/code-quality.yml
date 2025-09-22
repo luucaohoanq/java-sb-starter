@@ -76,8 +76,9 @@ jobs:
       - name: Run tests
         run: ./mvnw test
 
+      # https://github.com/dorny/test-reporter
       - name: Generate test report
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2.1.1
         if: success() || failure()
         with:
           name: Maven Tests
