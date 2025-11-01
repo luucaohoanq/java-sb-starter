@@ -23,31 +23,31 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class PerformanceMonitoringConfig {
 
-  /** Customizes the meter registry to add common tags and configure metrics. */
-  @Bean
-  public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
-    return registry -> {
-      registry
-          .config()
-          .commonTags("application", "orchidbe")
-          .commonTags("version", "1.0.0")
-          .meterFilter(
-              MeterFilter.deny(
-                  id -> {
-                    String uri = id.getTag("uri");
-                    return uri != null
-                        && (uri.startsWith("/actuator") || uri.startsWith("/swagger"));
-                  }));
+    /** Customizes the meter registry to add common tags and configure metrics. */
+    @Bean
+    public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+        return registry -> {
+            registry.config()
+                    .commonTags("application", "orchidbe")
+                    .commonTags("version", "1.0.0")
+                    .meterFilter(
+                            MeterFilter.deny(
+                                    id -> {
+                                        String uri = id.getTag("uri");
+                                        return uri != null
+                                                && (uri.startsWith("/actuator")
+                                                        || uri.startsWith("/swagger"));
+                                    }));
 
-      log.info("📊 Performance monitoring configured with Micrometer");
-    };
-  }
+            log.info("📊 Performance monitoring configured with Micrometer");
+        };
+    }
 
-  /** Custom timer for measuring API response times. */
-  @Bean
-  public Timer apiResponseTimer(MeterRegistry meterRegistry) {
-    return Timer.builder("api.response.time")
-        .description("API response time")
-        .register(meterRegistry);
-  }
+    /** Custom timer for measuring API response times. */
+    @Bean
+    public Timer apiResponseTimer(MeterRegistry meterRegistry) {
+        return Timer.builder("api.response.time")
+                .description("API response time")
+                .register(meterRegistry);
+    }
 }

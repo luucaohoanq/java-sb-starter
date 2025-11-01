@@ -32,44 +32,44 @@ import lombok.Setter;
 @Builder
 public class Order {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", unique = true, nullable = false)
-  @JsonProperty("id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    @JsonProperty("id")
+    private Long id;
 
-  private Double totalAmount;
+    private Double totalAmount;
 
-  private Date orderDate;
+    private Date orderDate;
 
-  private OrderStatus orderStatus;
+    private OrderStatus orderStatus;
 
-  @ManyToOne
-  @JoinColumn(name = "account_id", referencedColumnName = "id")
-  private Account account;
+    @ManyToOne
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Account account;
 
-  public enum OrderStatus {
-    PENDING,
-    PROCESSING,
-    COMPLETED,
-    CANCELLED,
-  }
+    public enum OrderStatus {
+        PENDING,
+        PROCESSING,
+        COMPLETED,
+        CANCELLED,
+    }
 
-  public static OrderRes fromEntity(Order order) {
-    return new OrderRes(
-        order.getId(),
-        order.getTotalAmount(),
-        order.getOrderDate(),
-        order.getOrderStatus(),
-        order.getAccount().getId());
-  }
+    public static OrderRes fromEntity(Order order) {
+        return new OrderRes(
+                order.getId(),
+                order.getTotalAmount(),
+                order.getOrderDate(),
+                order.getOrderStatus(),
+                order.getAccount().getId());
+    }
 
-  public static Order toEntity(OrderDTO.OrderReq orderReq, Account account) {
-    return Order.builder()
-        .totalAmount(orderReq.totalAmount())
-        .orderDate(orderReq.orderDate())
-        .orderStatus(orderReq.orderStatus())
-        .account(account)
-        .build();
-  }
+    public static Order toEntity(OrderDTO.OrderReq orderReq, Account account) {
+        return Order.builder()
+                .totalAmount(orderReq.totalAmount())
+                .orderDate(orderReq.orderDate())
+                .orderStatus(orderReq.orderStatus())
+                .account(account)
+                .build();
+    }
 }

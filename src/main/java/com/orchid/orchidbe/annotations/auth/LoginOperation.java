@@ -20,9 +20,9 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(
-    summary = "🚀 Login to get JWT token",
-    description =
-        """
+        summary = "🚀 Login to get JWT token",
+        description =
+                """
             **Login and get your authentication token**
 
             ### How to use this token in Swagger:
@@ -38,19 +38,20 @@ import java.lang.annotation.Target;
 
             ### Token expires based on the `expirationDate` in the response.
             """,
-    requestBody =
-        @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Login credentials",
-            required = true,
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = LoginReq.class),
-                    examples = {
-                      @ExampleObject(
-                          name = "Demo User",
-                          summary = "Example login",
-                          description = "Sample credentials for testing",
-                          externalValue = "classpath:/swagger/examples/login.json")
-                    })))
+        requestBody =
+                @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                        description = "Login credentials",
+                        required = true,
+                        content =
+                                @Content(
+                                        mediaType = "application/json",
+                                        schema = @Schema(implementation = LoginReq.class),
+                                        examples = {
+                                            @ExampleObject(
+                                                    name = "Demo User",
+                                                    summary = "Example login",
+                                                    description = "Sample credentials for testing",
+                                                    externalValue =
+                                                            "classpath:/swagger/examples/login.json")
+                                        })))
 public @interface LoginOperation {}

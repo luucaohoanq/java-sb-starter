@@ -32,15 +32,15 @@ import org.springframework.security.test.context.support.WithSecurityContext;
 @WithSecurityContext(factory = WithMockJwtUserSecurityContextFactory.class)
 public @interface WithMockJwtUser {
 
-  /** The email/username of the mock user */
-  String email() default "test@example.com";
+    /** The email/username of the mock user */
+    String email() default "test@example.com";
 
-  /** The name of the mock user */
-  String name() default "Test User";
+    /** The name of the mock user */
+    String name() default "Test User";
 
-  /** The roles to assign to the mock user */
-  RoleName[] roles() default {RoleName.USER};
+    /** The roles to assign to the mock user */
+    RoleName[] roles() default {RoleName.USER};
 
-  /** The user ID */
-  long userId() default 1L;
+    /** The user ID */
+    long userId() default 1L;
 }

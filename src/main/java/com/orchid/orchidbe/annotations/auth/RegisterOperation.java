@@ -20,9 +20,9 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(
-    summary = "👤 Register new account",
-    description =
-        """
+        summary = "👤 Register new account",
+        description =
+                """
         **Create a new user account**
 
         This endpoint allows new users to register in the system.
@@ -37,19 +37,24 @@ import java.lang.annotation.Target;
         - Must include at least one number
         - Must include at least one letter
         """,
-    requestBody =
-        @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Account registration details",
-            required = true,
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = AccountDTO.CreateAccountReq.class),
-                    examples = {
-                      @ExampleObject(
-                          name = "New User",
-                          summary = "Example registration",
-                          description = "Sample account registration data",
-                          externalValue = "classpath:/swagger/examples/register.json")
-                    })))
+        requestBody =
+                @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                        description = "Account registration details",
+                        required = true,
+                        content =
+                                @Content(
+                                        mediaType = "application/json",
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                AccountDTO.CreateAccountReq.class),
+                                        examples = {
+                                            @ExampleObject(
+                                                    name = "New User",
+                                                    summary = "Example registration",
+                                                    description =
+                                                            "Sample account registration data",
+                                                    externalValue =
+                                                            "classpath:/swagger/examples/register.json")
+                                        })))
 public @interface RegisterOperation {}

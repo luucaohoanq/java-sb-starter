@@ -23,33 +23,34 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
  * user details and roles.
  */
 public class WithMockJwtUserSecurityContextFactory
-    implements WithSecurityContextFactory<WithMockJwtUser> {
+        implements WithSecurityContextFactory<WithMockJwtUser> {
 
-  @Override
-  public SecurityContext createSecurityContext(WithMockJwtUser annotation) {
-    SecurityContext context = SecurityContextHolder.createEmptyContext();
+    @Override
+    public SecurityContext createSecurityContext(WithMockJwtUser annotation) {
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-    // Create the mock user account
-    Account mockAccount =
-        Account.builder()
-            .id(annotation.userId())
-            .email(annotation.email())
-            .name(annotation.name())
-            .password("mock_password") // Password is not important for tests
-            .status(Status.VERIFIED)
-            .role(createMockRole(annotation.roles()[0])) // Use first role as primary
-            .build();
+        // Create the mock user account
+        Account mockAccount =
+                Account.builder()
+                        .id(annotation.userId())
+                        .email(annotation.email())
+                        .name(annotation.name())
+                        .password("mock_password") // Password is not important for tests
+                        .status(Status.VERIFIED)
+                        .role(createMockRole(annotation.roles()[0])) // Use first role as primary
+                        .build();
 
-    // Create authentication token
-    Authentication authentication =
-        new UsernamePasswordAuthenticationToken(mockAccount, null, mockAccount.getAuthorities());
+        // Create authentication token
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(
+                        mockAccount, null, mockAccount.getAuthorities());
 
-    context.setAuthentication(authentication);
-    return context;
-  }
+        context.setAuthentication(authentication);
+        return context;
+    }
 
-  /** Create a mock Role object with the specified role name */
-  private Role createMockRole(RoleName roleName) {
-    return Role.builder().id(1L).name(roleName).build();
-  }
+    /** Create a mock Role object with the specified role name */
+    private Role createMockRole(RoleName roleName) {
+        return Role.builder().id(1L).name(roleName).build();
+    }
 }

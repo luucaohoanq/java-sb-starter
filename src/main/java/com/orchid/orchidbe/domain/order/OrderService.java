@@ -12,15 +12,15 @@ import java.util.List;
 
 public interface OrderService {
 
-  List<OrderDTO.OrderRes> getAll();
+    List<OrderDTO.OrderRes> getAll();
 
-  OrderRes getById(Long id);
+    OrderRes getById(Long id);
 
-  void add(OrderDTO.OrderReq order);
+    void add(OrderDTO.OrderReq order);
 
-  void update(Long id, OrderDTO.OrderReq order);
+    void update(Long id, OrderDTO.OrderReq order);
 
-  void delete(Long id);
+    void delete(Long id);
 
-  List<OrderDTO.OrderRes> getByUserId(Long userId);
+    List<OrderDTO.OrderRes> getByUserId(Long userId);
 }

@@ -36,127 +36,117 @@ import org.springframework.test.web.servlet.MockMvc;
 @DisplayName("Account Controller Security Tests")
 public class AccountControllerSecurityTest {
 
-  @Autowired private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
-  @Autowired private ObjectMapper objectMapper;
+    @Autowired private ObjectMapper objectMapper;
 
-  @MockBean private AccountService accountService;
+    @MockBean private AccountService accountService;
 
-  @MockBean private AuthService authService;
+    @MockBean private AuthService authService;
 
-  @Nested
-  @DisplayName("GET /api/accounts - Security Tests")
-  class GetAccountsSecurityTests {
+    @Nested
+    @DisplayName("GET /api/accounts - Security Tests")
+    class GetAccountsSecurityTests {
 
-    @Test
-    @DisplayName("Should deny access when no authentication")
-    void getAccounts_shouldReturn401_whenNotAuthenticated() throws Exception {
-      mockMvc
-          .perform(get("/api/accounts").contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isUnauthorized());
+        @Test
+        @DisplayName("Should deny access when no authentication")
+        void getAccounts_shouldReturn401_whenNotAuthenticated() throws Exception {
+            mockMvc.perform(get("/api/accounts").contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        @WithMockJwtUser(roles = {RoleName.USER})
+        @DisplayName("Should deny access for USER role")
+        void getAccounts_shouldReturn403_whenUserRole() throws Exception {
+            mockMvc.perform(get("/api/accounts").contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @WithMockJwtUser(roles = {RoleName.STAFF})
+        @DisplayName("Should deny access for STAFF role")
+        void getAccounts_shouldReturn403_whenStaffRole() throws Exception {
+            mockMvc.perform(get("/api/accounts").contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @WithMockJwtUser(roles = {RoleName.ADMIN})
+        @DisplayName("Should allow access for ADMIN role")
+        void getAccounts_shouldReturn200_whenAdminRole() throws Exception {
+            mockMvc.perform(get("/api/accounts").contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        @WithMockJwtUser(roles = {RoleName.MANAGER})
+        @DisplayName("Should allow access for MANAGER role")
+        void getAccounts_shouldReturn200_whenManagerRole() throws Exception {
+            mockMvc.perform(get("/api/accounts").contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+        }
     }
 
-    @Test
-    @WithMockJwtUser(roles = {RoleName.USER})
-    @DisplayName("Should deny access for USER role")
-    void getAccounts_shouldReturn403_whenUserRole() throws Exception {
-      mockMvc
-          .perform(get("/api/accounts").contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isForbidden());
+    @Nested
+    @DisplayName("POST /api/accounts/create-new-employee - Security Tests")
+    class CreateEmployeeSecurityTests {
+
+        private final AccountDTO.CreateStaffReq validRequest =
+                new AccountDTO.CreateStaffReq("Test Employee", "employee@test.com");
+
+        @Test
+        @DisplayName("Should deny access when no authentication")
+        void createEmployee_shouldReturn401_whenNotAuthenticated() throws Exception {
+            mockMvc.perform(
+                            post("/api/accounts/create-new-employee")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(validRequest)))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        @WithMockJwtUser(roles = {RoleName.USER})
+        @DisplayName("Should deny access for USER role")
+        void createEmployee_shouldReturn403_whenUserRole() throws Exception {
+            mockMvc.perform(
+                            post("/api/accounts/create-new-employee")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(validRequest)))
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @WithMockJwtUser(roles = {RoleName.STAFF})
+        @DisplayName("Should deny access for STAFF role")
+        void createEmployee_shouldReturn403_whenStaffRole() throws Exception {
+            mockMvc.perform(
+                            post("/api/accounts/create-new-employee")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(validRequest)))
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @WithMockJwtUser(roles = {RoleName.ADMIN})
+        @DisplayName("Should allow access for ADMIN role")
+        void createEmployee_shouldReturn201_whenAdminRole() throws Exception {
+            mockMvc.perform(
+                            post("/api/accounts/create-new-employee")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(validRequest)))
+                    .andExpect(status().isCreated());
+        }
+
+        @Test
+        @WithMockJwtUser(roles = {RoleName.MANAGER})
+        @DisplayName("Should allow access for MANAGER role")
+        void createEmployee_shouldReturn201_whenManagerRole() throws Exception {
+            mockMvc.perform(
+                            post("/api/accounts/create-new-employee")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(validRequest)))
+                    .andExpect(status().isCreated());
+        }
     }
-
-    @Test
-    @WithMockJwtUser(roles = {RoleName.STAFF})
-    @DisplayName("Should deny access for STAFF role")
-    void getAccounts_shouldReturn403_whenStaffRole() throws Exception {
-      mockMvc
-          .perform(get("/api/accounts").contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isForbidden());
-    }
-
-    @Test
-    @WithMockJwtUser(roles = {RoleName.ADMIN})
-    @DisplayName("Should allow access for ADMIN role")
-    void getAccounts_shouldReturn200_whenAdminRole() throws Exception {
-      mockMvc
-          .perform(get("/api/accounts").contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockJwtUser(roles = {RoleName.MANAGER})
-    @DisplayName("Should allow access for MANAGER role")
-    void getAccounts_shouldReturn200_whenManagerRole() throws Exception {
-      mockMvc
-          .perform(get("/api/accounts").contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk());
-    }
-  }
-
-  @Nested
-  @DisplayName("POST /api/accounts/create-new-employee - Security Tests")
-  class CreateEmployeeSecurityTests {
-
-    private final AccountDTO.CreateStaffReq validRequest =
-        new AccountDTO.CreateStaffReq("Test Employee", "employee@test.com");
-
-    @Test
-    @DisplayName("Should deny access when no authentication")
-    void createEmployee_shouldReturn401_whenNotAuthenticated() throws Exception {
-      mockMvc
-          .perform(
-              post("/api/accounts/create-new-employee")
-                  .contentType(MediaType.APPLICATION_JSON)
-                  .content(objectMapper.writeValueAsString(validRequest)))
-          .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    @WithMockJwtUser(roles = {RoleName.USER})
-    @DisplayName("Should deny access for USER role")
-    void createEmployee_shouldReturn403_whenUserRole() throws Exception {
-      mockMvc
-          .perform(
-              post("/api/accounts/create-new-employee")
-                  .contentType(MediaType.APPLICATION_JSON)
-                  .content(objectMapper.writeValueAsString(validRequest)))
-          .andExpect(status().isForbidden());
-    }
-
-    @Test
-    @WithMockJwtUser(roles = {RoleName.STAFF})
-    @DisplayName("Should deny access for STAFF role")
-    void createEmployee_shouldReturn403_whenStaffRole() throws Exception {
-      mockMvc
-          .perform(
-              post("/api/accounts/create-new-employee")
-                  .contentType(MediaType.APPLICATION_JSON)
-                  .content(objectMapper.writeValueAsString(validRequest)))
-          .andExpect(status().isForbidden());
-    }
-
-    @Test
-    @WithMockJwtUser(roles = {RoleName.ADMIN})
-    @DisplayName("Should allow access for ADMIN role")
-    void createEmployee_shouldReturn201_whenAdminRole() throws Exception {
-      mockMvc
-          .perform(
-              post("/api/accounts/create-new-employee")
-                  .contentType(MediaType.APPLICATION_JSON)
-                  .content(objectMapper.writeValueAsString(validRequest)))
-          .andExpect(status().isCreated());
-    }
-
-    @Test
-    @WithMockJwtUser(roles = {RoleName.MANAGER})
-    @DisplayName("Should allow access for MANAGER role")
-    void createEmployee_shouldReturn201_whenManagerRole() throws Exception {
-      mockMvc
-          .perform(
-              post("/api/accounts/create-new-employee")
-                  .contentType(MediaType.APPLICATION_JSON)
-                  .content(objectMapper.writeValueAsString(validRequest)))
-          .andExpect(status().isCreated());
-    }
-  }
 }

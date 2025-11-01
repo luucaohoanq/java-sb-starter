@@ -30,21 +30,21 @@ import lombok.Setter;
 @Builder
 public class OrderDetail {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", unique = true, nullable = false)
-  @JsonProperty("id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    @JsonProperty("id")
+    private Long id;
 
-  private Double price;
+    private Double price;
 
-  private Integer quantity;
+    private Integer quantity;
 
-  @ManyToOne
-  @JoinColumn(name = "orchid_id", referencedColumnName = "id")
-  private Orchid orchidId;
+    @ManyToOne
+    @JoinColumn(name = "orchid_id", referencedColumnName = "id")
+    private Orchid orchidId;
 
-  @ManyToOne
-  @JoinColumn(name = "order_id", referencedColumnName = "id")
-  private Order order;
+    @ManyToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
 }

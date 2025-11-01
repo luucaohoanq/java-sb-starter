@@ -35,78 +35,82 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AccountController {
 
-  private final AccountService accountService;
-  private final AuthService authService;
+    private final AccountService accountService;
+    private final AuthService authService;
 
-  @GetMapping("")
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
-  @Operation(summary = "Get all accounts", description = "Returns a list of all accounts")
-  @ApiResponse(responseCode = "200", description = "Successfully retrieved all accounts")
-  public ResponseEntity<MyApiResponse<List<AccountDTO.AccountResp>>> getAccounts() {
-    return MyApiResponse.success(accountService.getAll());
-  }
-
-  @GetMapping("/{id}")
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
-  @Operation(summary = "Get all accounts", description = "Returns a list of all accounts")
-  @ApiResponse(responseCode = "200", description = "Successfully retrieved all accounts")
-  public ResponseEntity<MyApiResponse<Account>> getAccountById(@PathVariable Long id) {
-    return MyApiResponse.success(accountService.getById(id));
-  }
-
-  // Get user details from token
-  @GetMapping("/me")
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
-  public ResponseEntity<MyApiResponse<Account>> getUserDetails(HttpServletRequest request)
-      throws Exception {
-    String token = request.getHeader("Authorization");
-    if (token == null || !token.startsWith("Bearer ")) {
-      return MyApiResponse.unauthorized("Missing or invalid Authorization header");
+    @GetMapping("")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @Operation(summary = "Get all accounts", description = "Returns a list of all accounts")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved all accounts")
+    public ResponseEntity<MyApiResponse<List<AccountDTO.AccountResp>>> getAccounts() {
+        return MyApiResponse.success(accountService.getAll());
     }
-    token = token.substring(7); // Remove "Bearer " prefix
-    Account userDetail = authService.getUserDetailsFromToken(token);
-    return MyApiResponse.success(userDetail);
-  }
 
-  @PostMapping("/create-new-employee")
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
-  @Operation(summary = "Create new employee", description = "Creates a new employee account")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "201", description = "Employee created successfully"),
-        @ApiResponse(responseCode = "400", description = "Invalid input or email already exists")
-      })
-  public ResponseEntity<MyApiResponse<Object>> createNewEmployee(
-      @RequestBody AccountDTO.CreateStaffReq accountReq) {
-    accountService.addEmployee(accountReq);
-    return MyApiResponse.created();
-  }
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
+    @Operation(summary = "Get all accounts", description = "Returns a list of all accounts")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved all accounts")
+    public ResponseEntity<MyApiResponse<Account>> getAccountById(@PathVariable Long id) {
+        return MyApiResponse.success(accountService.getById(id));
+    }
 
-  @PatchMapping("/{id}")
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
-  @Operation(summary = "Update account", description = "Updates an existing account by ID")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "Account updated successfully"),
-        @ApiResponse(responseCode = "400", description = "Invalid input or email already exists"),
-        @ApiResponse(responseCode = "404", description = "Account not found")
-      })
-  public ResponseEntity<MyApiResponse<Object>> updateAccount(
-      @PathVariable Long id, @RequestBody AccountDTO.UpdateAccountReq accountReq) {
-    accountService.update(id, accountReq);
-    return MyApiResponse.updated();
-  }
+    // Get user details from token
+    @GetMapping("/me")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_STAFF', 'ROLE_MANAGER')")
+    public ResponseEntity<MyApiResponse<Account>> getUserDetails(HttpServletRequest request)
+            throws Exception {
+        String token = request.getHeader("Authorization");
+        if (token == null || !token.startsWith("Bearer ")) {
+            return MyApiResponse.unauthorized("Missing or invalid Authorization header");
+        }
+        token = token.substring(7); // Remove "Bearer " prefix
+        Account userDetail = authService.getUserDetailsFromToken(token);
+        return MyApiResponse.success(userDetail);
+    }
 
-  @DeleteMapping("/{id}")
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
-  @Operation(summary = "Delete account", description = "Deletes an account by ID")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "204", description = "Account deleted successfully"),
-        @ApiResponse(responseCode = "404", description = "Account not found")
-      })
-  public ResponseEntity<MyApiResponse<Object>> deleteAccount(@PathVariable Long id) {
-    accountService.delete(id);
-    return MyApiResponse.noContent();
-  }
+    @PostMapping("/create-new-employee")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @Operation(summary = "Create new employee", description = "Creates a new employee account")
+    @ApiResponses(
+            value = {
+                @ApiResponse(responseCode = "201", description = "Employee created successfully"),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "Invalid input or email already exists")
+            })
+    public ResponseEntity<MyApiResponse<Object>> createNewEmployee(
+            @RequestBody AccountDTO.CreateStaffReq accountReq) {
+        accountService.addEmployee(accountReq);
+        return MyApiResponse.created();
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @Operation(summary = "Update account", description = "Updates an existing account by ID")
+    @ApiResponses(
+            value = {
+                @ApiResponse(responseCode = "200", description = "Account updated successfully"),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "Invalid input or email already exists"),
+                @ApiResponse(responseCode = "404", description = "Account not found")
+            })
+    public ResponseEntity<MyApiResponse<Object>> updateAccount(
+            @PathVariable Long id, @RequestBody AccountDTO.UpdateAccountReq accountReq) {
+        accountService.update(id, accountReq);
+        return MyApiResponse.updated();
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @Operation(summary = "Delete account", description = "Deletes an account by ID")
+    @ApiResponses(
+            value = {
+                @ApiResponse(responseCode = "204", description = "Account deleted successfully"),
+                @ApiResponse(responseCode = "404", description = "Account not found")
+            })
+    public ResponseEntity<MyApiResponse<Object>> deleteAccount(@PathVariable Long id) {
+        accountService.delete(id);
+        return MyApiResponse.noContent();
+    }
 }

@@ -27,11 +27,11 @@ import lombok.Setter;
 @Builder
 public class Category {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", unique = true, nullable = false)
-  @JsonProperty("id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    @JsonProperty("id")
+    private Long id;
 
-  private String name;
+    private String name;
 }

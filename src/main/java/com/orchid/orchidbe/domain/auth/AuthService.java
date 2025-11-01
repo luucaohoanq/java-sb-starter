@@ -14,13 +14,13 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public interface AuthService {
 
-  Account getUserDetailsFromRefreshToken(String refreshToken) throws Exception;
+    Account getUserDetailsFromRefreshToken(String refreshToken) throws Exception;
 
-  Account getUserDetailsFromToken(String token) throws Exception;
+    Account getUserDetailsFromToken(String token) throws Exception;
 
-  AuthPort.LoginResponse login(LoginReq loginReq, HttpServletRequest request);
+    AuthPort.LoginResponse login(LoginReq loginReq, HttpServletRequest request);
 
-  AuthPort.LoginResponse refreshToken(TokenPort.RefreshTokenDTO refreshTokenDTO) throws Exception;
+    AuthPort.LoginResponse refreshToken(TokenPort.RefreshTokenDTO refreshTokenDTO) throws Exception;
 
-  void logout(HttpServletRequest request);
+    void logout(HttpServletRequest request);
 }

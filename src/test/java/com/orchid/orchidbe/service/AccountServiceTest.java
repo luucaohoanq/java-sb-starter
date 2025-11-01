@@ -32,48 +32,48 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
 
-  @Mock private AccountRepository accountRepository;
-  @Mock private RoleService roleService;
-  @Mock private PasswordEncoder passwordEncoder;
+    @Mock private AccountRepository accountRepository;
+    @Mock private RoleService roleService;
+    @Mock private PasswordEncoder passwordEncoder;
 
-  @InjectMocks private AccountServiceImpl accountService;
+    @InjectMocks private AccountServiceImpl accountService;
 
-  private List<Role> roles;
+    private List<Role> roles;
 
-  @BeforeEach
-  void init() {
-    roles =
-        List.of(
-            new Role(1L, RoleName.USER),
-            new Role(2L, RoleName.STAFF),
-            new Role(3L, RoleName.ADMIN));
-  }
+    @BeforeEach
+    void init() {
+        roles =
+                List.of(
+                        new Role(1L, RoleName.USER),
+                        new Role(2L, RoleName.STAFF),
+                        new Role(3L, RoleName.ADMIN));
+    }
 
-  @Test
-  void getAll_ShouldReturnListOfAccounts() {
-    var user1 = new Account();
-    user1.setRole(roles.get(0));
-    var user2 = new Account();
-    user2.setRole(roles.get(1));
-    var user3 = new Account();
-    user3.setRole(roles.get(2));
+    @Test
+    void getAll_ShouldReturnListOfAccounts() {
+        var user1 = new Account();
+        user1.setRole(roles.get(0));
+        var user2 = new Account();
+        user2.setRole(roles.get(1));
+        var user3 = new Account();
+        user3.setRole(roles.get(2));
 
-    when(accountRepository.findAll()).thenReturn(List.of(user1, user2, user3));
+        when(accountRepository.findAll()).thenReturn(List.of(user1, user2, user3));
 
-    var result = accountService.getAll();
+        var result = accountService.getAll();
 
-    assert (result.size() == 3);
-  }
+        assert (result.size() == 3);
+    }
 
-  @Test
-  void add_ShouldSaveAccountWithUserRole() {
-    var req = new AccountDTO.CreateAccountReq("hoang", "hoang@gmail.com", "123456");
-    when(accountRepository.existsByEmail(req.email())).thenReturn(false);
-    when(passwordEncoder.encode("123456")).thenReturn("encoded_pw");
-    when(roleService.getByName(RoleName.USER)).thenReturn(roles.get(0));
+    @Test
+    void add_ShouldSaveAccountWithUserRole() {
+        var req = new AccountDTO.CreateAccountReq("hoang", "hoang@gmail.com", "123456");
+        when(accountRepository.existsByEmail(req.email())).thenReturn(false);
+        when(passwordEncoder.encode("123456")).thenReturn("encoded_pw");
+        when(roleService.getByName(RoleName.USER)).thenReturn(roles.get(0));
 
-    accountService.add(req);
+        accountService.add(req);
 
-    verify(accountRepository).save(any(Account.class));
-  }
+        verify(accountRepository).save(any(Account.class));
+    }
 }

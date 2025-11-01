@@ -17,13 +17,13 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(
-    summary = "🚪 Logout and invalidate token",
-    description =
-        """
+        summary = "🚪 Logout and invalidate token",
+        description =
+                """
             **Logout and invalidate your current JWT token**
 
             This endpoint requires authentication. Make sure you're logged in first.
             After logout, you'll need to login again to access protected endpoints.
             """,
-    security = @SecurityRequirement(name = "bearer-jwt"))
+        security = @SecurityRequirement(name = "bearer-jwt"))
 public @interface LogoutOperation {}

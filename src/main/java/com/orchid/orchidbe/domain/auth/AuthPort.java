@@ -19,31 +19,31 @@ import jakarta.validation.constraints.NotBlank;
 
 public interface AuthPort {
 
-  @JsonInclude(Include.NON_NULL)
-  record LoginResponse(TokenResponse token, AccountDTO.AccountCompactRes account) {
+    @JsonInclude(Include.NON_NULL)
+    record LoginResponse(TokenResponse token, AccountDTO.AccountCompactRes account) {
 
-    public static LoginResponse from(Token token, Account account) {
-      return new LoginResponse(
-          new TokenResponse(
-              token.getId(),
-              token.getToken(),
-              token.getRefreshToken(),
-              token.getTokenType(),
-              token.getExpirationDate(),
-              token.getRefreshExpirationDate(),
-              token.isMobile(),
-              token.isRevoked(),
-              token.isExpired()),
-          new AccountDTO.AccountCompactRes(
-              account.getId(), account.getEmail(), account.getRole().getName()));
+        public static LoginResponse from(Token token, Account account) {
+            return new LoginResponse(
+                    new TokenResponse(
+                            token.getId(),
+                            token.getToken(),
+                            token.getRefreshToken(),
+                            token.getTokenType(),
+                            token.getExpirationDate(),
+                            token.getRefreshExpirationDate(),
+                            token.isMobile(),
+                            token.isRevoked(),
+                            token.isExpired()),
+                    new AccountDTO.AccountCompactRes(
+                            account.getId(), account.getEmail(), account.getRole().getName()));
+        }
     }
-  }
 
-  record LoginReq(
-      @Email(message = "Email is not valid")
-          @Schema(description = "User email", example = "mnhw.0612@gmail.com")
-          String email,
-      @NotBlank(message = "Password is required")
-          @Schema(description = "User password", example = "string")
-          String password) {}
+    record LoginReq(
+            @Email(message = "Email is not valid")
+                    @Schema(description = "User email", example = "mnhw.0612@gmail.com")
+                    String email,
+            @NotBlank(message = "Password is required")
+                    @Schema(description = "User password", example = "string")
+                    String password) {}
 }

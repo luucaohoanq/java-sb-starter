@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 api:
   prefix: /api
 
@@ -67,26 +70,32 @@ management:
         enabled: true
 
 # Logging configuration
-logging:
-  config: classpath:logback-spring.xml
-  level:
-    # Your application logging level
-    com.orchid.orchidbe: ${APP_LOG_LEVEL:INFO}
+#logging:
+#  config: classpath:logback-spring.xml
+#  level:
+#    # Your application logging level
+#    com.orchid.orchidbe: ${APP_LOG_LEVEL:INFO}
+#
+#    # Framework logging levels (reduce noise)
+#    org.springframework: ${SPRING_LOG_LEVEL:WARN}
+#    org.springframework.web: ${SPRING_WEB_LOG_LEVEL:INFO}
+#    org.springframework.security: ${SECURITY_LOG_LEVEL:INFO}
+#    org.springframework.data.mongodb: ${MONGO_LOG_LEVEL:INFO}
+#
+#    # Root level
+#    root: ${ROOT_LOG_LEVEL:WARN}
+#
+#    # Uncomment for SQL debugging
+#    # org.hibernate.SQL: DEBUG
+#    # org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#
+#  # Pattern for console (only used if not overridden by logback-spring.xml)
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) %X{requestId:--} - %msg%n"
+#    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} %X{requestId:--} - %msg%n"
 
-    # Framework logging levels (reduce noise)
-    org.springframework: ${SPRING_LOG_LEVEL:WARN}
-    org.springframework.web: ${SPRING_WEB_LOG_LEVEL:INFO}
-    org.springframework.security: ${SECURITY_LOG_LEVEL:INFO}
-    org.springframework.data.mongodb: ${MONGO_LOG_LEVEL:INFO}
-
-    # Root level
-    root: ${ROOT_LOG_LEVEL:WARN}
-
-    # Uncomment for SQL debugging
-    # org.hibernate.SQL: DEBUG
-    # org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-
-  # Pattern for console (only used if not overridden by logback-spring.xml)
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) %X{requestId:--} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} %X{requestId:--} - %msg%n"
+com:
+  auth0:
+    domain: ${AUTH0_DOMAIN:your-domain.auth0.com}
+    clientId: ${AUTH0_CLIENT_ID:your-client-id}
+    clientSecret: ${AUTH0_CLIENT_SECRET:your-client-secret}

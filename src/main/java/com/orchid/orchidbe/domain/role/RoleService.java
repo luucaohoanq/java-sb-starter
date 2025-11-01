@@ -12,15 +12,15 @@ import java.util.List;
 
 public interface RoleService {
 
-  List<Role> getAll();
+    List<Role> getAll();
 
-  Role getById(Long id);
+    Role getById(Long id);
 
-  Role getByName(RoleName name);
+    Role getByName(RoleName name);
 
-  void add(RoleDTO.RoleReq role);
+    void add(RoleDTO.RoleReq role);
 
-  void update(Long id, RoleDTO.RoleReq role);
+    void update(Long id, RoleDTO.RoleReq role);
 
-  void delete(Long id);
+    void delete(Long id);
 }
