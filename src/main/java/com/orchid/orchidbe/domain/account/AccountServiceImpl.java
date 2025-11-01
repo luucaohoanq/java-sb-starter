@@ -26,105 +26,113 @@ import org.springframework.web.server.ResponseStatusException;
 @Slf4j
 public class AccountServiceImpl implements AccountService {
 
-  private final AccountRepository accountRepository;
-  private final PasswordEncoder passwordEncoder;
-  private final RoleService roleService;
+    private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
-  @Override
-  public List<AccountDTO.AccountResp> getAll() {
-    return accountRepository.findAll().stream().map(AccountDTO.AccountResp::fromEntity).toList();
-  }
-
-  @Override
-  public Account getById(Long id) {
-    return accountRepository
-        .findById(id)
-        .orElseThrow(
-            () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account not found"));
-  }
-
-  @Override
-  public Account getByEmail(String email) {
-    return accountRepository
-        .findByEmail(email)
-        .orElseThrow(
-            () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account not found"));
-  }
-
-  @Override
-  public void add(AccountDTO.CreateAccountReq account) {
-
-    var defaultRole = roleService.getByName(RoleName.USER);
-
-    if (accountRepository.existsByEmail(account.email())) {
-      throw new IllegalArgumentException("Email already exists");
+    @Override
+    public List<AccountDTO.AccountResp> getAll() {
+        return accountRepository.findAll().stream()
+                .map(AccountDTO.AccountResp::fromEntity)
+                .toList();
     }
 
-    var newAccount = new Account();
-    newAccount.setName(account.name());
-    newAccount.setEmail(account.email());
-    newAccount.setPassword(passwordEncoder.encode(account.password()));
-    newAccount.setRole(defaultRole);
-
-    log.info("New user registered successfully");
-    accountRepository.save(newAccount);
-  }
-
-  @Override
-  @Transactional
-  public void addEmployee(AccountDTO.CreateStaffReq account) {
-
-    if (accountRepository.existsByEmail(account.email())) {
-      throw new IllegalArgumentException("Email already exists");
+    @Override
+    public Account getById(Long id) {
+        return accountRepository
+                .findById(id)
+                .orElseThrow(
+                        () ->
+                                new ResponseStatusException(
+                                        HttpStatus.BAD_REQUEST, "Account not found"));
     }
 
-    var newAccount = new Account();
-    newAccount.setName(account.name());
-    newAccount.setEmail(account.email());
-    newAccount.setPassword(passwordEncoder.encode("123456"));
-    newAccount.setRole(roleService.getByName(RoleName.STAFF));
-
-    log.info("New staff registered successfully");
-    accountRepository.save(newAccount);
-  }
-
-  @Override
-  @Transactional
-  public void update(Long id, UpdateAccountReq account) {
-
-    var existingAccount =
-        accountRepository
-            .findById(id)
-            .orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account not found"));
-
-    if (accountRepository.existsByEmailAndIdNot(account.email(), id)) {
-      throw new IllegalArgumentException("Email already exists");
+    @Override
+    public Account getByEmail(String email) {
+        return accountRepository
+                .findByEmail(email)
+                .orElseThrow(
+                        () ->
+                                new ResponseStatusException(
+                                        HttpStatus.BAD_REQUEST, "Account not found"));
     }
 
-    if (StringUtils.isNotBlank(account.password())) {
-      existingAccount.setPassword(passwordEncoder.encode(account.password()));
-    }
-    if (StringUtils.isNotBlank(account.name())) {
-      existingAccount.setName(account.name());
-    }
-    if (StringUtils.isNotBlank(account.email())) {
-      existingAccount.setEmail(account.email());
-    }
-    if (account.roleName() != null) {
-      var role = roleService.getByName(account.roleName());
-      if (role == null) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not found");
-      }
-      existingAccount.setRole(role);
-    }
-    accountRepository.save(existingAccount);
-  }
+    @Override
+    public void add(AccountDTO.CreateAccountReq account) {
 
-  @Override
-  @Transactional
-  public void delete(Long id) {
-    var existingAccount = getById(id);
-    accountRepository.delete(existingAccount);
-  }
+        var defaultRole = roleService.getByName(RoleName.USER);
+
+        if (accountRepository.existsByEmail(account.email())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
+        var newAccount = new Account();
+        newAccount.setName(account.name());
+        newAccount.setEmail(account.email());
+        newAccount.setPassword(passwordEncoder.encode(account.password()));
+        newAccount.setRole(defaultRole);
+
+        log.info("New user registered successfully");
+        accountRepository.save(newAccount);
+    }
+
+    @Override
+    @Transactional
+    public void addEmployee(AccountDTO.CreateStaffReq account) {
+
+        if (accountRepository.existsByEmail(account.email())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
+        var newAccount = new Account();
+        newAccount.setName(account.name());
+        newAccount.setEmail(account.email());
+        newAccount.setPassword(passwordEncoder.encode("123456"));
+        newAccount.setRole(roleService.getByName(RoleName.STAFF));
+
+        log.info("New staff registered successfully");
+        accountRepository.save(newAccount);
+    }
+
+    @Override
+    @Transactional
+    public void update(Long id, UpdateAccountReq account) {
+
+        var existingAccount =
+                accountRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new ResponseStatusException(
+                                                HttpStatus.BAD_REQUEST, "Account not found"));
+
+        if (accountRepository.existsByEmailAndIdNot(account.email(), id)) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
+        if (StringUtils.isNotBlank(account.password())) {
+            existingAccount.setPassword(passwordEncoder.encode(account.password()));
+        }
+        if (StringUtils.isNotBlank(account.name())) {
+            existingAccount.setName(account.name());
+        }
+        if (StringUtils.isNotBlank(account.email())) {
+            existingAccount.setEmail(account.email());
+        }
+        if (account.roleName() != null) {
+            var role = roleService.getByName(account.roleName());
+            if (role == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not found");
+            }
+            existingAccount.setRole(role);
+        }
+        accountRepository.save(existingAccount);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        var existingAccount = getById(id);
+        accountRepository.delete(existingAccount);
+    }
 }

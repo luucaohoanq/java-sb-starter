@@ -29,24 +29,24 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class BaseEntity {
 
-  @Column(name = "created_at")
-  @JsonProperty("createdAt")
-  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Ho_Chi_Minh")
-  private LocalDateTime createdAt;
+    @Column(name = "created_at")
+    @JsonProperty("createdAt")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Ho_Chi_Minh")
+    private LocalDateTime createdAt;
 
-  @Column(name = "updated_at")
-  @JsonProperty("updatedAt")
-  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Ho_Chi_Minh")
-  private LocalDateTime updatedAt;
+    @Column(name = "updated_at")
+    @JsonProperty("updatedAt")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Ho_Chi_Minh")
+    private LocalDateTime updatedAt;
 
-  @PrePersist
-  protected void onCreate() {
-    createdAt = LocalDateTime.now();
-    updatedAt = LocalDateTime.now();
-  }
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
 
-  @PreUpdate
-  protected void onUpdate() {
-    updatedAt = LocalDateTime.now();
-  }
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

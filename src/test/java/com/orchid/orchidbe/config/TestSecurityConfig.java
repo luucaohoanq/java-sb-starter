@@ -25,16 +25,16 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(prePostEnabled = true)
 public class TestSecurityConfig {
 
-  /**
-   * Security filter chain for testing that enables method security and allows proper testing
-   * of @PreAuthorize annotations.
-   */
-  @Bean
-  @Primary
-  public SecurityFilterChain testSecurityFilterChain(HttpSecurity http) throws Exception {
-    http.csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
+    /**
+     * Security filter chain for testing that enables method security and allows proper testing
+     * of @PreAuthorize annotations.
+     */
+    @Bean
+    @Primary
+    public SecurityFilterChain testSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
 
-    return http.build();
-  }
+        return http.build();
+    }
 }

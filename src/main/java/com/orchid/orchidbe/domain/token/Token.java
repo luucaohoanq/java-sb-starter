@@ -31,35 +31,35 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @JsonPropertyOrder({
-  "id",
-  "token",
-  "refreshToken",
-  "tokenType",
-  "expirationDate",
-  "refreshExpirationDate",
-  "isMobile",
-  "revoked",
-  "expired",
-  "accountId"
+    "id",
+    "token",
+    "refreshToken",
+    "tokenType",
+    "expirationDate",
+    "refreshExpirationDate",
+    "isMobile",
+    "revoked",
+    "expired",
+    "accountId"
 })
 public class Token {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", unique = true, nullable = false)
-  @JsonProperty("id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    @JsonProperty("id")
+    private Long id;
 
-  private String token;
-  private String refreshToken;
-  private String tokenType;
-  private LocalDateTime expirationDate;
-  private LocalDateTime refreshExpirationDate;
-  private boolean isMobile;
-  private boolean revoked;
-  private boolean expired;
+    private String token;
+    private String refreshToken;
+    private String tokenType;
+    private LocalDateTime expirationDate;
+    private LocalDateTime refreshExpirationDate;
+    private boolean isMobile;
+    private boolean revoked;
+    private boolean expired;
 
-  @ManyToOne
-  @JoinColumn(name = "account_id", referencedColumnName = "id")
-  private Account account;
+    @ManyToOne
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    private Account account;
 }

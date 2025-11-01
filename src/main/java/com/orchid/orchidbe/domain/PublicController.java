@@ -30,46 +30,46 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Public API", description = "Public endpoints that don't require authentication")
 public class PublicController {
 
-  // Account Controller
+    // Account Controller
 
-  // Role Controller
+    // Role Controller
 
-  // Orchid Controller
-  private final OrchidService orchidService;
+    // Orchid Controller
+    private final OrchidService orchidService;
 
-  @GetMapping("/orchids")
-  public ResponseEntity<?> getOrchids() {
-    return ResponseEntity.ok(orchidService.getAll());
-  }
+    @GetMapping("/orchids")
+    public ResponseEntity<?> getOrchids() {
+        return ResponseEntity.ok(orchidService.getAll());
+    }
 
-  @GetMapping("/orchids/{id}")
-  public ResponseEntity<?> getOrchidById(@PathVariable("id") Long id) {
-    return ResponseEntity.ok(orchidService.getById(id));
-  }
+    @GetMapping("/orchids/{id}")
+    public ResponseEntity<?> getOrchidById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(orchidService.getById(id));
+    }
 
-  // Order Controller
+    // Order Controller
 
-  // Category Controller
-  private final CategoryService categoryService;
+    // Category Controller
+    private final CategoryService categoryService;
 
-  @GetMapping("/categories")
-  @Operation(summary = "Get all categories", description = "Returns a list of all categories")
-  @ApiResponse(responseCode = "200", description = "Successfully retrieved all categories")
-  public ResponseEntity<MyApiResponse<List<Category>>> getCategories() {
-    return MyApiResponse.success(categoryService.getAll());
-  }
+    @GetMapping("/categories")
+    @Operation(summary = "Get all categories", description = "Returns a list of all categories")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved all categories")
+    public ResponseEntity<MyApiResponse<List<Category>>> getCategories() {
+        return MyApiResponse.success(categoryService.getAll());
+    }
 
-  @GetMapping("/categories/{id}")
-  @Operation(summary = "Get category by ID", description = "Returns a category by its ID")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "Category found"),
-        @ApiResponse(responseCode = "404", description = "Category not found")
-      })
-  public ResponseEntity<MyApiResponse<Category>> getCategoryById(@PathVariable Long id) {
-    return MyApiResponse.success(categoryService.getById(id));
-  }
+    @GetMapping("/categories/{id}")
+    @Operation(summary = "Get category by ID", description = "Returns a category by its ID")
+    @ApiResponses(
+            value = {
+                @ApiResponse(responseCode = "200", description = "Category found"),
+                @ApiResponse(responseCode = "404", description = "Category not found")
+            })
+    public ResponseEntity<MyApiResponse<Category>> getCategoryById(@PathVariable Long id) {
+        return MyApiResponse.success(categoryService.getById(id));
+    }
 
-  // Token Controller
+    // Token Controller
 
 }

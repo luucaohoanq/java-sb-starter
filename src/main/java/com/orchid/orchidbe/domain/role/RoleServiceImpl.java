@@ -23,59 +23,63 @@ import org.springframework.web.server.ResponseStatusException;
 @Slf4j
 public class RoleServiceImpl implements RoleService {
 
-  private final RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-  @Override
-  public List<Role> getAll() {
-    return roleRepository.findAll();
-  }
-
-  @Override
-  public Role getById(Long id) {
-    return roleRepository
-        .findById(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
-  }
-
-  @Override
-  public Role getByName(RoleName name) {
-    return roleRepository
-        .findByName(name)
-        .orElseThrow(() -> new IllegalArgumentException("Role with name " + name + " not found"));
-  }
-
-  @Override
-  public void add(RoleReq role) {
-    RoleName newName = role.name();
-    if (roleRepository.existsByName(newName)) {
-      throw new IllegalArgumentException("Role with name " + newName + " already exists");
+    @Override
+    public List<Role> getAll() {
+        return roleRepository.findAll();
     }
 
-    roleRepository.save(new Role(newName));
-  }
-
-  @Override
-  @Transactional
-  public void update(Long id, RoleDTO.RoleReq role) {
-    var existingRole = getById(id);
-    RoleName newName = role.name();
-
-    if (existingRole.getName() != newName) {
-
-      log.info(
-          "Updating role with id {}: name changed from {} to {}",
-          id,
-          existingRole.getName(),
-          newName);
-      existingRole.setName(newName);
-      roleRepository.save(existingRole);
+    @Override
+    public Role getById(Long id) {
+        return roleRepository
+                .findById(id)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
     }
-  }
 
-  @Override
-  @Transactional
-  public void delete(Long id) {
-    var existingRole = getById(id);
-    roleRepository.delete(existingRole);
-  }
+    @Override
+    public Role getByName(RoleName name) {
+        return roleRepository
+                .findByName(name)
+                .orElseThrow(
+                        () ->
+                                new IllegalArgumentException(
+                                        "Role with name " + name + " not found"));
+    }
+
+    @Override
+    public void add(RoleReq role) {
+        RoleName newName = role.name();
+        if (roleRepository.existsByName(newName)) {
+            throw new IllegalArgumentException("Role with name " + newName + " already exists");
+        }
+
+        roleRepository.save(new Role(newName));
+    }
+
+    @Override
+    @Transactional
+    public void update(Long id, RoleDTO.RoleReq role) {
+        var existingRole = getById(id);
+        RoleName newName = role.name();
+
+        if (existingRole.getName() != newName) {
+
+            log.info(
+                    "Updating role with id {}: name changed from {} to {}",
+                    id,
+                    existingRole.getName(),
+                    newName);
+            existingRole.setName(newName);
+            roleRepository.save(existingRole);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        var existingRole = getById(id);
+        roleRepository.delete(existingRole);
+    }
 }

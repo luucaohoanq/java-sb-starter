@@ -93,3 +93,9 @@ management:
 #  pattern:
 #    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) %X{requestId:--} - %msg%n"
 #    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} %X{requestId:--} - %msg%n"
+
+com:
+  auth0:
+    domain: ${AUTH0_DOMAIN:your-domain.auth0.com}
+    clientId: ${AUTH0_CLIENT_ID:your-client-id}
+    clientSecret: ${AUTH0_CLIENT_SECRET:your-client-secret}

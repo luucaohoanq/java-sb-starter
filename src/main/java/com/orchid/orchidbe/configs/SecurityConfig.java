@@ -22,25 +22,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
-  @Bean
-  public UserDetailsService userDetailsService() {
-    return email ->
-        accountRepository
-            .findByEmail(email)
-            .orElseThrow(
-                () -> new UsernameNotFoundException("Cannot find user with email = " + email));
-  }
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return email ->
+                accountRepository
+                        .findByEmail(email)
+                        .orElseThrow(
+                                () ->
+                                        new UsernameNotFoundException(
+                                                "Cannot find user with email = " + email));
+    }
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-  @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-      throws Exception {
-    return config.getAuthenticationManager();
-  }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
+            throws Exception {
+        return config.getAuthenticationManager();
+    }
 }

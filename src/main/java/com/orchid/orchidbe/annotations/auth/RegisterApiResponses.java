@@ -21,40 +21,40 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @ApiResponses(
-    value = {
-      @ApiResponse(
-          responseCode = "201",
-          description = "✅ Account created successfully",
-          content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = MyApiResponse.class),
-                  examples =
-                      @ExampleObject(
-                          name = "Success Response",
-                          value =
-                              """
+        value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "✅ Account created successfully",
+                    content =
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MyApiResponse.class),
+                                    examples =
+                                            @ExampleObject(
+                                                    name = "Success Response",
+                                                    value =
+                                                            """
                     {
                       "code": 201,
                       "message": "Created",
                       "data": null
                     }
                     """))),
-      @ApiResponse(
-          responseCode = "400",
-          description = "❌ Email already exists",
-          content =
-              @Content(
-                  mediaType = "application/json",
-                  examples =
-                      @ExampleObject(
-                          value =
-                              """
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "❌ Email already exists",
+                    content =
+                            @Content(
+                                    mediaType = "application/json",
+                                    examples =
+                                            @ExampleObject(
+                                                    value =
+                                                            """
                     {
                       "code": 400,
                       "message": "Email already exists",
                       "data": null
                     }
                     """)))
-    })
+        })
 public @interface RegisterApiResponses {}

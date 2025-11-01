@@ -20,51 +20,51 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TestDatabaseUtils {
 
-  private final EntityManager entityManager;
+    private final EntityManager entityManager;
 
-  /**
-   * Cleans up all test data by disabling foreign key checks, truncating tables, and re-enabling
-   * foreign key checks. This is safe for H2 test databases.
-   */
-  @Transactional
-  public void cleanDatabase() {
-    // Disable foreign key checks
-    entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
+    /**
+     * Cleans up all test data by disabling foreign key checks, truncating tables, and re-enabling
+     * foreign key checks. This is safe for H2 test databases.
+     */
+    @Transactional
+    public void cleanDatabase() {
+        // Disable foreign key checks
+        entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
 
-    // Clean all tables in proper order
-    entityManager.createNativeQuery("DELETE FROM order_details").executeUpdate();
-    entityManager.createNativeQuery("DELETE FROM orders").executeUpdate();
-    entityManager.createNativeQuery("DELETE FROM tokens").executeUpdate();
-    entityManager.createNativeQuery("DELETE FROM accounts").executeUpdate();
-    entityManager.createNativeQuery("DELETE FROM roles").executeUpdate();
-    entityManager.createNativeQuery("DELETE FROM categories").executeUpdate();
-    entityManager.createNativeQuery("DELETE FROM orchids").executeUpdate();
+        // Clean all tables in proper order
+        entityManager.createNativeQuery("DELETE FROM order_details").executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM orders").executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM tokens").executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM accounts").executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM roles").executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM categories").executeUpdate();
+        entityManager.createNativeQuery("DELETE FROM orchids").executeUpdate();
 
-    // Reset sequences
-    entityManager
-        .createNativeQuery("ALTER SEQUENCE IF EXISTS accounts_seq RESTART WITH 1")
-        .executeUpdate();
-    entityManager
-        .createNativeQuery("ALTER SEQUENCE IF EXISTS roles_seq RESTART WITH 1")
-        .executeUpdate();
-    entityManager
-        .createNativeQuery("ALTER SEQUENCE IF EXISTS orders_seq RESTART WITH 1")
-        .executeUpdate();
-    entityManager
-        .createNativeQuery("ALTER SEQUENCE IF EXISTS tokens_seq RESTART WITH 1")
-        .executeUpdate();
-    entityManager
-        .createNativeQuery("ALTER SEQUENCE IF EXISTS categories_seq RESTART WITH 1")
-        .executeUpdate();
-    entityManager
-        .createNativeQuery("ALTER SEQUENCE IF EXISTS orchids_seq RESTART WITH 1")
-        .executeUpdate();
+        // Reset sequences
+        entityManager
+                .createNativeQuery("ALTER SEQUENCE IF EXISTS accounts_seq RESTART WITH 1")
+                .executeUpdate();
+        entityManager
+                .createNativeQuery("ALTER SEQUENCE IF EXISTS roles_seq RESTART WITH 1")
+                .executeUpdate();
+        entityManager
+                .createNativeQuery("ALTER SEQUENCE IF EXISTS orders_seq RESTART WITH 1")
+                .executeUpdate();
+        entityManager
+                .createNativeQuery("ALTER SEQUENCE IF EXISTS tokens_seq RESTART WITH 1")
+                .executeUpdate();
+        entityManager
+                .createNativeQuery("ALTER SEQUENCE IF EXISTS categories_seq RESTART WITH 1")
+                .executeUpdate();
+        entityManager
+                .createNativeQuery("ALTER SEQUENCE IF EXISTS orchids_seq RESTART WITH 1")
+                .executeUpdate();
 
-    // Re-enable foreign key checks
-    entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
+        // Re-enable foreign key checks
+        entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
 
-    // Flush and clear persistence context
-    entityManager.flush();
-    entityManager.clear();
-  }
+        // Flush and clear persistence context
+        entityManager.flush();
+        entityManager.clear();
+    }
 }

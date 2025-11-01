@@ -17,9 +17,11 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @ApiResponses(
-    value = {
-      @ApiResponse(responseCode = "204", description = "✅ Logout successful"),
-      @ApiResponse(responseCode = "401", description = "❌ Unauthorized - Token invalid or missing"),
-      @ApiResponse(responseCode = "404", description = "❌ Token not found")
-    })
+        value = {
+            @ApiResponse(responseCode = "204", description = "✅ Logout successful"),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "❌ Unauthorized - Token invalid or missing"),
+            @ApiResponse(responseCode = "404", description = "❌ Token not found")
+        })
 public @interface LogoutApiResponses {}

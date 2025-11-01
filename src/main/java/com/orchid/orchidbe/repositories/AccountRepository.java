@@ -13,9 +13,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-  boolean existsByEmail(String email);
+    boolean existsByEmail(String email);
 
-  boolean existsByEmailAndIdNot(String email, Long id);
+    boolean existsByEmailAndIdNot(String email, Long id);
 
-  Optional<Account> findByEmail(String email);
+    Optional<Account> findByEmail(String email);
 }

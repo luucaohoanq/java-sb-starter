@@ -11,5 +11,5 @@ import com.orchid.orchidbe.domain.role.Role.RoleName;
 
 public interface RoleDTO {
 
-  record RoleReq(RoleName name) {}
+    record RoleReq(RoleName name) {}
 }

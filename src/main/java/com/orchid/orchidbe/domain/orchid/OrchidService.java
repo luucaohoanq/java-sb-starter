@@ -15,15 +15,15 @@ import org.springframework.data.domain.Pageable;
 
 public interface OrchidService {
 
-  List<OrchidDTO.OrchidRes> getAll();
+    List<OrchidDTO.OrchidRes> getAll();
 
-  Page<OrchidRes> getAll(Pageable pageable);
+    Page<OrchidRes> getAll(Pageable pageable);
 
-  OrchidDTO.OrchidRes getById(Long id);
+    OrchidDTO.OrchidRes getById(Long id);
 
-  OrchidDTO.OrchidRes add(OrchidDTO.OrchidReq orchid);
+    OrchidDTO.OrchidRes add(OrchidDTO.OrchidReq orchid);
 
-  void update(Long id, OrchidReq orchid);
+    void update(Long id, OrchidReq orchid);
 
-  void deleteById(Long id);
+    void deleteById(Long id);
 }
