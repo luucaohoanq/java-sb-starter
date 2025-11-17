@@ -10,6 +10,20 @@ services:
       - ./stores:/stores
     networks:
       - sba
+    environment:
+      - ZIPKIN_URL=http://zipkin:9411/api/v2/spans
+    depends_on:
+      - zipkin
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
+    networks:
+      - sba
+    environment:
+      - STORAGE_TYPE=mem
 
 networks:
   sba:

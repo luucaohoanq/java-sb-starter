@@ -36,16 +36,27 @@ jwt:
   expiration-refresh-token: ${JWT_REFRESH_TOKEN_EXPIRATION:5184000} #60 days = 60 * 24 * 60 * 60
   secretKey: ${JWT_SECRET_KEY:LuuCaoHoangLuuCaoHoangLuuCaoHoangLuuCaoHoangLuuCaoHoang}
 
-# Performance monitoring with Actuator + Micrometer
+# Distributed Tracing with Micrometer Tracing + Zipkin
 management:
+  tracing:
+    sampling:
+      probability: 1.0 # Sample 100% of traces in development (reduce in production, e.g., 0.1)
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL:http://localhost:9411/api/v2/spans}
+      connect-timeout: 5s
+      read-timeout: 10s
+
+  # Performance monitoring with Actuator + Micrometer
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,prometheus,httptrace,beans,env,loggers
+        include: health,info,metrics,prometheus,httptrace,beans,env,loggers,circuitbreakers,circuitbreakerevents,ratelimiters,retries,bulkheads,timelimiters
       base-path: /actuator
   endpoint:
     health:
       show-details: always
+      show-components: always
     metrics:
       access: unrestricted
     prometheus:
@@ -63,12 +74,109 @@ management:
         http:
           server:
             requests: 0.5,0.95,0.99
+    tags:
+      application: ${spring.application.name}
 
   prometheus:
     metrics:
       export:
         enabled: true
+  health:
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
 
+# Resilience4j Configuration
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+        recordExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.util.concurrent.TimeoutException
+          - java.io.IOException
+    instances:
+      externalService:
+        baseConfig: default
+      database:
+        baseConfig: default
+        slidingWindowSize: 20
+        minimumNumberOfCalls: 10
+
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 1s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+        retryExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.util.concurrent.TimeoutException
+          - java.io.IOException
+    instances:
+      externalService:
+        baseConfig: default
+      database:
+        baseConfig: default
+        maxAttempts: 5
+        waitDuration: 500ms
+
+  bulkhead:
+    configs:
+      default:
+        maxConcurrentCalls: 10
+        maxWaitDuration: 0ms
+    instances:
+      externalService:
+        baseConfig: default
+      database:
+        maxConcurrentCalls: 20
+
+  thread-pool-bulkhead:
+    configs:
+      default:
+        maxThreadPoolSize: 4
+        coreThreadPoolSize: 2
+        queueCapacity: 100
+        keepAliveDuration: 20ms
+    instances:
+      externalService:
+        baseConfig: default
+
+  ratelimiter:
+    configs:
+      default:
+        registerHealthIndicator: true
+        limitForPeriod: 50
+        limitRefreshPeriod: 1s
+        timeoutDuration: 0s
+        eventConsumerBufferSize: 100
+    instances:
+      externalService:
+        baseConfig: default
+      api:
+        limitForPeriod: 100
+        limitRefreshPeriod: 1s
+
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 2s
+        cancelRunningFuture: true
+    instances:
+      externalService:
+        baseConfig: default
+        timeoutDuration: 3s
 # Logging configuration
 #logging:
 #  config: classpath:logback-spring.xml
